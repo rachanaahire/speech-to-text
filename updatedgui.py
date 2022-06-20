@@ -18,7 +18,7 @@ class Entries:
     
     def create_row(self, scol, ecol, wid):
             for j in range(scol, ecol):
-                self.cell = Text(self.second_frame, height=3, width=wid).bin
+                self.cell = Text(self.second_frame, height=3, width=wid)
                 self.cell.grid(row=self.row_num,column=j)
 
     def get_all_entry_widgets_text_content(self, parent_widget):
