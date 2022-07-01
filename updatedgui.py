@@ -6,7 +6,8 @@ import csv
 import os
 
 class Entries:
-    def __init__(self, second_frame, i):
+    def __init__(self, acc, second_frame, i):
+        self.acc = acc
         self.row_num = i
         self.second_frame = second_frame
         self.lock = False
@@ -26,7 +27,7 @@ class Entries:
             for j in range(scol, ecol):
                 self.cell = Text(self.second_frame, height=3, width=wid)
                 self.cell.grid(row=self.row_num,column=j)
-                self.cell.bind("<ButtonRelease-1>", self.OnTextClick)
+                self.cell.bind("<Double-Button-1>", self.OnTextClick)
     
     def OnTextClick(self, event):
         if self.lock:
@@ -40,8 +41,11 @@ class Entries:
                 data= stream.read(4096)
                 if self.recognizer.AcceptWaveform(data):
                     self.textdata = self.recognizer.Result()
-                    print(self.textdata)
-                    self.second_frame.focus_get().insert(INSERT, self.textdata[14:-3]+" ")
+                    if len(self.textdata) > 17:
+                        print(self.textdata)
+                        self.second_frame.focus_get().insert(INSERT, self.textdata[14:-3]+" ")
+                    else: 
+                        print("No speech recognised.")
                     bol= False
 
     def get_all_entry_widgets_text_content(self, parent_widget):
@@ -54,7 +58,7 @@ class Entries:
         if not (os.path.exists('Report.csv')):
             with open('Report.csv', 'w', newline='') as new_file:
                 csv_writer = csv.writer(new_file)
-                csv_writer.writerow(["Time & Date", "Airframe Hours", "How found or Aircrew Code", "By Whom (Name)", "SNOW", "Reason for placing unserviceable","Job Number","Repairs, Storage instructions, Modifications, Special Technical Instructions Servicing Instructions or other work including component Replacements. Note 1. State serial Numbers of Replacement items,  where applicable 2. RN only. Quote Workshop Reference ORN", "Signature of Operative(s)", "Time and Date Completed", "Trade", "Man Hours", "Signature of Supervisor", "Authorised signature Certified Defect Cleared or Transferred to MOD from 703/704"])
+                csv_writer.writerow(["Account Number","Time & Date", "Airframe Hours", "How found or Aircrew Code", "By Whom (Name)", "SNOW", "Reason for placing unserviceable","Job Number","Repairs, Storage instructions, Modifications, Special Technical Instructions Servicing Instructions or other work including component Replacements. Note 1. State serial Numbers of Replacement items,  where applicable 2. RN only. Quote Workshop Reference ORN", "Signature of Operative(s)", "Time and Date Completed", "Trade", "Man Hours", "Signature of Supervisor", "Authorised signature Certified Defect Cleared or Transferred to MOD from 703/704"])
                 for row in mdata:
                     csv_writer.writerow(row)
                 print("created Successfully")
@@ -62,7 +66,7 @@ class Entries:
             with open('Report.csv', 'a+', newline='') as write_obj:
                 csv_writer = csv.writer(write_obj)
                 for row in mdata:
-                    csv_writer.writerow(row)
+                    csv_writer.writerow([self.acc]+row)
                 print("updated successfully")
 
     def record(self):
@@ -73,17 +77,19 @@ class Entries:
     
     def add_row(self):
         self.row_num = self.row_num + 1
-        Entries(self.second_frame, self.row_num)
+        Entries(self.acc, self.second_frame, self.row_num)
 
 class MyWindow:
     def __init__(self):
-        root.title("Text to Speech")
+        root.title("Change of Serviceability Log")
         self.accno = StringVar()
         self.bottom = None
 
         ttk.Label(root, text="Account Number: ").place(x=50, y=50)
         ttk.Entry(root, textvariable=self.accno, width=30, font=('calibre', 10, 'normal')).place(x=170,y=50)
+        ttk.Button(root, text="SUBMIT", command=self.child_window).place(x=400, y=50)
 
+    def child_window(self):
         #Updates
         content = Frame(root, width=800, height=400)
         content.pack(fill=BOTH, expand=1)
@@ -134,7 +140,7 @@ class MyWindow:
         ttk.Label(second_frame, text="         Man Hours", width=20, padding=(0,27,0,28), relief='solid').grid(row=1,column=11)
         ttk.Label(second_frame, text="       Signature of\n       Supervisor", width=20, padding=(0,20,0,20), relief='solid').grid(row=1,column=12)
         
-        Entries(second_frame,2)
+        Entries(self.accno,second_frame,2)
 
 
 root = Tk()
