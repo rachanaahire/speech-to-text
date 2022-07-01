@@ -1,7 +1,9 @@
+#  This includes the google speech Recognization code
 from tkinter import *
 from tkinter import ttk
-from vosk import Model, KaldiRecognizer
-import pyaudio
+import time
+import speech_recognition as sr
+import sys
 import csv
 import os
 
@@ -10,8 +12,6 @@ class Entries:
         self.row_num = i
         self.second_frame = second_frame
         self.lock = False
-        model = Model(r"D:\study\python\text to speech project\TTS project\vosk-model-small-en-us-0.15")
-        self.recognizer = KaldiRecognizer(model, 16000)
         self.create_row(0, 7, 15)
         self.create_row(7, 8, 50)
         self.create_row(8, 13, 15)
@@ -30,19 +30,22 @@ class Entries:
     
     def OnTextClick(self, event):
         if self.lock:
-            print("Listening...")
             self.textdata = ""
-            mic = pyaudio.PyAudio()
-            stream =  mic.open(format=pyaudio.paInt16, channels=1, rate=16000, input=True, frames_per_buffer=8192)
-            stream.start_stream()
-            bol = True
-            while bol:
-                data= stream.read(4096)
-                if self.recognizer.AcceptWaveform(data):
-                    self.textdata = self.recognizer.Result()
-                    print(self.textdata)
-                    self.second_frame.focus_get().insert(INSERT, self.textdata[14:-3]+" ")
-                    bol= False
+            r = sr.Recognizer()
+            with sr.Microphone() as source:
+                print("listening ...")
+                audio = r.listen(source)
+            try:
+                print("You said: " + r.recognize_google(audio))
+                self.textdata = r.recognize_google(audio)
+                # print(self.textdata)
+                self.second_frame.focus_get().insert(END, self.textdata)
+                time.sleep(1)
+            except sr.UnknownValueError:
+                print("Google Speech Recognition couldn't understand")
+                sys.exit()
+            except sr.RequestError as e:
+                print("Could not request results from Google Speech Recognition service; {0}".format(e))
 
     def get_all_entry_widgets_text_content(self, parent_widget):
         children_widgets = parent_widget.winfo_children()
