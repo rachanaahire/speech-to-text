@@ -44,5 +44,5 @@ class ScrollableFrame:
         if opt == 'insert':
             Entries(root, acc, second_frame, 2)
         if opt == 'update':
-            Entries(root, acc, second_frame, 2)
+            print("uodateee")
         

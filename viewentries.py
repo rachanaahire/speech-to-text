@@ -4,6 +4,7 @@ from myentries import Entries
 from mylabels import MyLabels
 import pandas as pd
 import openpyxl
+from common_functions import clear_root_buttons
 
 class ViewEntries:
     def __init__(self, root, acc, second_frame, row_no):
@@ -13,6 +14,7 @@ class ViewEntries:
         self.row_range = 0
         self.acc = acc
         self.wid = {7: 50, 13: 17}
+        clear_root_buttons(root, 3)
         book = openpyxl.load_workbook('Report.xlsx')
         self.sheets = {ws.title: ws for ws in book.worksheets}
         if self.acc in self.sheets:
@@ -42,7 +44,7 @@ class ViewEntries:
                     cell.insert(END, sen)
 
         back = offset - limit # This value is used by Previous button
-        next = offset + limit  # This value is used by Next button       
+        next = offset + limit  # This value is used by Next button 
         b1 = ttk.Button(self.root, text='Next >', command=lambda: self.my_display(next))
         b1.place(x=40,y=550)
         b2 = ttk.Button(self.root, text='< Prev', command=lambda: self.my_display(back))
@@ -57,53 +59,3 @@ class ViewEntries:
         else:
             b2["state"]="disabled"# disable Prev button
 
-# root = Tk()
-# style = ttk.Style(root)
-# style.theme_use('clam')
-# root.geometry("900x600")
-
-# # 3
-
-# # for x in range(self.mrows-1):
-# #     print(df_acc.iloc[x][0])
-
-# content = Frame(root, width=800, height=400)
-# content.pack(fill=BOTH, expand=1)
-# content.pack_propagate(0)
-# content.place(relx=0.5, y=300, anchor=CENTER)
-
-# # Create main frame
-# main_frame = Frame(content)
-# main_frame.pack(fill=BOTH, expand=1)
-
-# # Create canvas
-# my_canvas = Canvas(main_frame)
-
-# # create scrollbar to thhe canvas
-# my_scrollbar_v = ttk.Scrollbar(
-#     main_frame, orient=VERTICAL, command=my_canvas.yview)
-# my_scrollbar_v.pack(side=RIGHT, fill=Y)
-
-# my_scrollbar_h = ttk.Scrollbar(
-#     main_frame, orient=HORIZONTAL, command=my_canvas.xview)
-# my_scrollbar_h.pack(side=BOTTOM, fill=X)
-
-# # configure canvas
-# my_canvas.configure(yscrollcommand=my_scrollbar_v.set)
-# my_canvas.configure(xscrollcommand=my_scrollbar_h.set)
-# my_canvas.bind('<Configure>', lambda e: my_canvas.configure(
-#     scrollregion=my_canvas.bbox("all")))
-
-
-# my_canvas.pack(side=TOP, fill=BOTH, expand=1)
-
-# # create another frame inside the canvas
-# second_frame = Frame(my_canvas)
-
-# # add that new frame to a window in canvas
-# my_canvas.create_window((0, 0), window=second_frame, anchor="nw")
-
-# MyLabels(second_frame)
-# ViewEntries(root, second_frame)
-
-# root.mainloop()

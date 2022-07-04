@@ -5,6 +5,7 @@ import pandas as pd
 import openpyxl
 import pyaudio
 import os
+from common_functions import clear_root_buttons
 
 class Entries:
     def __init__(self, root, acc, second_frame, i, add = False, snow = 1):
@@ -14,6 +15,7 @@ class Entries:
         self.second_frame = second_frame
         self.lock = False
         self.snow = snow
+        clear_root_buttons(root, 3)
         model = Model(r"D:\study\python\text to speech project\TTS project\vosk-model-small-en-us-0.15")
         self.recognizer = KaldiRecognizer(model, 16000)
 
