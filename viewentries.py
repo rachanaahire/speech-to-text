@@ -1,10 +1,8 @@
 from tkinter import *
 from tkinter import ttk
-from myentries import Entries
-from mylabels import MyLabels
+from common_functions import clear_root_buttons, getnum
 import pandas as pd
 import openpyxl
-from common_functions import clear_root_buttons
 
 class ViewEntries:
     def __init__(self, root, acc, second_frame, row_no):
@@ -13,49 +11,69 @@ class ViewEntries:
         self.root = root
         self.row_range = 0
         self.acc = acc
+        self.limit = 3
         self.wid = {7: 50, 13: 17}
         clear_root_buttons(root, 3)
         book = openpyxl.load_workbook('Report.xlsx')
         self.sheets = {ws.title: ws for ws in book.worksheets}
         if self.acc in self.sheets:
+            self.df_acc = pd.read_excel('Report.xlsx', sheet_name=self.acc)
             self.mrows = self.sheets[self.acc].max_row - 1
             self.mcols = self.sheets[self.acc].max_column
+            for r in range(self.row_no, self.limit+self.row_no):
+                b = ttk.Button(self.second_frame, text="Update", command= self.update)
+                b.grid(row=r, column=0, ipady=10.5, ipadx=5)
             self.my_display(0)
         else:
-            print("hhhh")
             ttk.Label(self.second_frame, text="No records found").grid(row=self.row_no, column=0)
 
-        print(self.row_range)
+    def focus(self, event):
+        widget = self.second_frame.focus_get()
+        print(widget, "has focus")
+        print(event)
+    
+    def update(self):
+        widget = self.second_frame.focus_get()
+        print("Gggg", widget)
+        vrow = int(getnum(str(widget)))
+        # index = int(getnum(str(widget)))+self.row_range-3
+        index = {'orow': vrow+self.row_range-3, 'vrow' : vrow}
+        top= Toplevel(self.root)
+        top.geometry("900x600")
+        top.title("UPDATE ENTRY")
+        from scrollableframe import ScrollableFrame
+        ScrollableFrame(top, 'update', self.acc, index)
 
     def my_display(self, offset):
-        print("pooo",offset)
-        limit = 3
-        df_acc = pd.read_excel('Report.xlsx', sheet_name=self.acc)
-        for i in range(self.row_no, limit+self.row_no):
+        for i in range(self.row_no, self.limit+self.row_no):
             for j in range(1, self.mcols):
                 mywid = 15 if (j-1 not in self.wid) else self.wid[j-1]
                 cell = Text(self.second_frame, height=3, width=mywid)
-                cell.grid(row=i, column=j-1)
+                cell.grid(row=i, column=j)
+
                 sen = ""
                 if (i-self.row_no+offset>=self.mrows):
                     cell.insert(END, "")
                 else:
-                    sen = "" if pd.isna(df_acc.iloc[i-self.row_no+offset][j]) else df_acc.iloc[i-self.row_no+offset][j]
+                    sen = "" if pd.isna(self.df_acc.iloc[i-self.row_no+offset][j]) else self.df_acc.iloc[i-self.row_no+offset][j]
                     cell.insert(END, sen)
-
-        back = offset - limit # This value is used by Previous button
-        next = offset + limit  # This value is used by Next button 
+                self.row_range = i-self.row_no+offset
+                
+        back = offset - self.limit
+        next = offset + self.limit 
         b1 = ttk.Button(self.root, text='Next >', command=lambda: self.my_display(next))
         b1.place(x=40,y=550)
         b2 = ttk.Button(self.root, text='< Prev', command=lambda: self.my_display(back))
         b2.place(x=150,y=550)
-        if(self.mrows+1 <= next): 
-            b1["state"]="disabled" # disable next button
+        if(self.mrows <= next): 
+            b1["state"]="disabled"
         else:
-            b1["state"]="active"  # enable next button
+            b1["state"]="active"  
             
         if(back >= 0):
-            b2["state"]="active"  # enable Prev button
+            b2["state"]="active"  
         else:
-            b2["state"]="disabled"# disable Prev button
+            b2["state"]="disabled"
+        
+        print(self.row_range)
 

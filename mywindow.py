@@ -23,12 +23,12 @@ class MyWindow:
     def child_view_window(self):
         if self.main_frame != None:
             clear_frame(self.main_frame)
-        ScrollableFrame(self.root, self.accno.get(), 'view')
+        ScrollableFrame(self.root, 'view', self.accno.get())
 
     def child_insert_window(self):
         if self.main_frame != None:
             clear_frame(self.main_frame)
-        ScrollableFrame(self.root, self.accno.get(), 'insert')
+        ScrollableFrame(self.root, 'insert', self.accno.get())
 
 
         

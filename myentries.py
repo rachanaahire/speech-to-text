@@ -1,3 +1,4 @@
+from logging import root
 from tkinter import *
 from tkinter import ttk
 from vosk import Model, KaldiRecognizer
@@ -6,40 +7,55 @@ import openpyxl
 import pyaudio
 import os
 from common_functions import clear_root_buttons
+from viewentries import ViewEntries
 
 class Entries:
-    def __init__(self, root, acc, second_frame, i, add = False, snow = 1):
+    def __init__(self, root, acc, second_frame, i, opt, ind, add = False, snow = 1):
         self.root = root
         self.acc = acc
         self.row_num = i
         self.second_frame = second_frame
+        self.opt = opt
+        self.index = ind
+        self.df_acc = None
         self.lock = False
         self.snow = snow
+        self.wid = {7: 50, 13: 17}
         clear_root_buttons(root, 3)
         model = Model(r"D:\study\python\text to speech project\TTS project\vosk-model-small-en-us-0.15")
         self.recognizer = KaldiRecognizer(model, 16000)
-
-        #fettch SNO
-        self.create_row(0, 4, 15,"")
-        if (os.path.exists('Report.xlsx') and not add):
+        if (os.path.exists('Report.xlsx')):
             book = openpyxl.load_workbook('Report.xlsx')
             sheets = {ws.title: ws for ws in book.worksheets}
             if self.acc in sheets:
                 self.df_acc = pd.read_excel('Report.xlsx', sheet_name=self.acc)
-                self.snow = int(self.df_acc.iloc[-1]['SNOW']) + 1
-                self.create_row(4, 5, 15,self.snow)
+        if (opt == 'insert'):
+            #fettch SNO
+            self.create_row(0, 4, 15,"")
+            if (os.path.exists('Report.xlsx') and not add):
+                # book = openpyxl.load_workbook('Report.xlsx')
+                # sheets = {ws.title: ws for ws in book.worksheets}
+                if self.acc in sheets:
+                    # self.df_acc = pd.read_excel('Report.xlsx', sheet_name=self.acc)
+                    self.snow = int(self.df_acc.iloc[-1]['SNOW']) + 1
+                    self.create_row(4, 5, 15,self.snow)
+                else:
+                    self.create_row(4, 5, 15,self.snow)
             else:
                 self.create_row(4, 5, 15,self.snow)
+
+            self.create_row(5, 7, 15,"")
+            self.create_row(7, 8, 50,"")
+            self.create_row(8, 13, 15,"")
+            self.create_row(13, 14, 17,"")
         else:
-            self.create_row(4, 5, 15,self.snow)
-
-        self.create_row(5, 7, 15,"")
-
-        # ENTRIES
-        # self.create_row(0, 7, 15)
-        self.create_row(7, 8, 50,"")
-        self.create_row(8, 13, 15,"")
-        self.create_row(13, 14, 17,"")
+            print('update')
+            for j in range(1, 15):
+                mywid = 15 if (j-1 not in self.wid) else self.wid[j-1]
+                cell = Text(self.second_frame, height=3, width=mywid)
+                cell.grid(row=2, column=j-1)
+                print("===========",self.index['orow'])
+                cell.insert(END, self.df_acc.iloc[self.index['orow']][j])
 
         ttk.Button(self.root, text="RECORD",
                    command=self.record).place(x=100, y=550)
@@ -47,8 +63,12 @@ class Entries:
                    command=self.stoprec).place(x=200, y=550)
         ttk.Button(self.root, text="SAVE", command=lambda w=second_frame:
                    self.get_all_entry_widgets_text_content(w)).place(x=300, y=550)
-        ttk.Button(self.root, text="ADD ROW",
-                   command=self.add_row).place(x=400, y=550)
+        if (opt == 'insert'):
+            ttk.Button(self.root, text="ADD ROW",
+                    command=self.add_row).place(x=400, y=550)
+        elif(opt == 'update'):
+            ttk.Button(self.root, text="CANCEL",
+                    command=self.cancel).place(x=400, y=550)
 
     def create_row(self, scol, ecol, wid, ins):
         for j in range(scol, ecol):
@@ -80,26 +100,39 @@ class Entries:
                     bol = False
 
     def get_all_entry_widgets_text_content(self, parent_widget):
-        children_widgets = parent_widget.winfo_children()
-        mydata = [child_widget.get(1.0, 'end')[
-            :-1] for child_widget in children_widgets if child_widget.winfo_class() == 'Text']
-        mdata = [[self.acc]+mydata[i:i+14] for i in range(0, len(mydata), 14)]
-        # print("Data: ", mdata)
+        if self.opt == 'insert':
+            children_widgets = parent_widget.winfo_children()
+            self.mydata = [child_widget.get(1.0, 'end')[:-1] for child_widget in children_widgets if child_widget.winfo_class() == 'Text']
+            self.mdata = [[self.acc]+self.mydata[i:i+14] for i in range(0, len(self.mydata), 14)]
+            # print("Data: ", mdata)
 
-        df = pd.DataFrame(mdata, columns=["Account Number", "Time & Date", "Airframe Hours", "How found or Aircrew Code", "By Whom (Name)", "SNOW", "Reason for placing unserviceable", "Job Number", "Repairs, Storage instructions, Modifications, Special Technical Instructions Servicing Instructions or other work including component Replacements. Note 1. State serial Numbers of Replacement items,  where applicable 2. RN only. Quote Workshop Reference ORN",
-                          "Signature of Operative(s)", "Time and Date Completed", "Trade", "Man Hours", "Signature of Supervisor", "Authorised signature Certified Defect Cleared or Transferred to MOD from 703/704"])
-        if not (os.path.exists('Report.xlsx')):
-            df.to_excel('Report.xlsx', index=False, sheet_name=self.acc)
-            print("Created Successfully")
-        else:
-            book = openpyxl.load_workbook('Report.xlsx')
-            writer = pd.ExcelWriter('Report.xlsx', engine='openpyxl')
-            writer.book = book
-            writer.sheets = {ws.title: ws for ws in book.worksheets}
-            sr = writer.sheets[self.acc].max_row
-            df.to_excel(writer, sheet_name=self.acc, startrow=sr, index=False, header=False)
-            writer.save()
-            print("Updated Successfully")
+            df = pd.DataFrame(self.mdata, columns=["Account Number", "Time & Date", "Airframe Hours", "How found or Aircrew Code", "By Whom (Name)", "SNOW", "Reason for placing unserviceable", "Job Number", "Repairs, Storage instructions, Modifications, Special Technical Instructions Servicing Instructions or other work including component Replacements. Note 1. State serial Numbers of Replacement items,  where applicable 2. RN only. Quote Workshop Reference ORN",
+                            "Signature of Operative(s)", "Time and Date Completed", "Trade", "Man Hours", "Signature of Supervisor", "Authorised signature Certified Defect Cleared or Transferred to MOD from 703/704"])
+            if not (os.path.exists('Report.xlsx')):
+                df.to_excel('Report.xlsx', index=False, sheet_name=self.acc)
+                print("Created Successfully")
+            else:
+                book = openpyxl.load_workbook('Report.xlsx')
+                writer = pd.ExcelWriter('Report.xlsx', engine='openpyxl')
+                writer.book = book
+                writer.sheets = {ws.title: ws for ws in book.worksheets}
+                sr = writer.sheets[self.acc].max_row
+                df.to_excel(writer, sheet_name=self.acc, startrow=sr, index=False, header=False)
+                writer.save()
+                print("Updated Successfully")
+        elif self.opt == 'update':
+            children_widgets = parent_widget.winfo_children()
+            self.mydata = [child_widget.get(1.0, 'end')[:-1] for child_widget in children_widgets if child_widget.winfo_class() == 'Text']
+            wb = openpyxl.load_workbook('Report.xlsx')
+            wb.get_sheet_names()
+            sheet1 = wb.get_sheet_by_name(self.acc)
+            for x in range(2,16):
+                cell = sheet1.cell(row=self.index['orow']+2, column=x)
+                cell.value = self.mydata[x-2]
+            wb.save('Report.xlsx')
+            print("UPDATED SUCCESSFULLY")
+            ttk.Label(self.root, text="UPDATED SUCCESSFULLY").place(x=600, y=550)
+
 
     def record(self):
         self.lock = True
@@ -109,8 +142,10 @@ class Entries:
         self.lock = False
         print("STOP Record BUTTON CLICKED")
 
-
     def add_row(self):
         self.row_num = self.row_num + 1
         self.snow = self.snow + 1
-        Entries(self.root, self.acc, self.second_frame, self.row_num, True, self.snow)
+        Entries(self.root, self.acc, self.second_frame, self.row_num, 'insert', None, True, self.snow)
+    
+    def cancel(self):
+        self.root.destroy()
