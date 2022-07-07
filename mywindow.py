@@ -10,15 +10,16 @@ class MyWindow:
         self.accno = StringVar()
         self.bottom = None
 
-        ttk.Label(self.root, text="Account Number: ").place(x=50, y=50)
-        ttk.Entry(self.root, textvariable=self.accno, width=30, font=('calibre', 10, 'normal')).place(x=170, y=50)
-        ttk.Button(self.root, text="SUBMIT",command=self.mymenu).place(x=400, y=50)
+        ttk.Label(self.root, text="Change of Serviceability Log", font=('calibre', 20)).place(x=500, y=30)
+        ttk.Label(self.root, text="Account Number: ").place(x=200, y=110)
+        ttk.Entry(self.root, textvariable=self.accno, width=30, font=('calibre', 10, 'normal')).place(x=320, y=110)
+        ttk.Button(self.root, text="SUBMIT",command=self.mymenu).place(x=550, y=110)
         
     
     def mymenu(self):
         self.main_frame = None
-        ttk.Button(self.root, text="INSERT", command=self.child_insert_window).place(x=518, y=50)
-        ttk.Button(self.root, text="VIEW", command= self.child_view_window).place(x=600, y=50)
+        ttk.Button(self.root, text="INSERT", command=self.child_insert_window).place(x=700, y=110)
+        ttk.Button(self.root, text="VIEW", command= self.child_view_window).place(x=778, y=110)
 
     def child_view_window(self):
         if self.main_frame != None:

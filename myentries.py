@@ -21,7 +21,7 @@ class Entries:
         self.lock = False
         self.snow = snow
         self.wid = {7: 50, 13: 17}
-        clear_root_buttons(root, 3)
+        clear_root_buttons(root)
         model = Model(r"D:\study\python\text to speech project\TTS project\vosk-model-small-en-us-0.15")
         self.recognizer = KaldiRecognizer(model, 16000)
         if (os.path.exists('Report.xlsx')):
@@ -58,17 +58,17 @@ class Entries:
                 cell.insert(END, self.df_acc.iloc[self.index['orow']][j])
 
         ttk.Button(self.root, text="RECORD",
-                   command=self.record).place(x=100, y=550)
+                   command=self.record).place(x=200, y=600)
         ttk.Button(self.root, text="STOP RECORD",
-                   command=self.stoprec).place(x=200, y=550)
+                   command=self.stoprec).place(x=295, y=600)
         ttk.Button(self.root, text="SAVE", command=lambda w=second_frame:
-                   self.get_all_entry_widgets_text_content(w)).place(x=300, y=550)
+                   self.get_all_entry_widgets_text_content(w)).place(x=400, y=600)
         if (opt == 'insert'):
             ttk.Button(self.root, text="ADD ROW",
-                    command=self.add_row).place(x=400, y=550)
+                    command=self.add_row).place(x=500, y=600)
         elif(opt == 'update'):
             ttk.Button(self.root, text="CANCEL",
-                    command=self.cancel).place(x=400, y=550)
+                    command=self.cancel).place(x=595, y=600)
 
     def create_row(self, scol, ecol, wid, ins):
         for j in range(scol, ecol):
@@ -110,7 +110,8 @@ class Entries:
                             "Signature of Operative(s)", "Time and Date Completed", "Trade", "Man Hours", "Signature of Supervisor", "Authorised signature Certified Defect Cleared or Transferred to MOD from 703/704"])
             if not (os.path.exists('Report.xlsx')):
                 df.to_excel('Report.xlsx', index=False, sheet_name=self.acc)
-                print("Created Successfully")
+                print("EXCEL CREATED SUCCESSFULLY")
+                ttk.Label(self.root, text="EXCEL CREATED SUCCESSFULLY", foreground='green').place(x=600, y=550)
             else:
                 book = openpyxl.load_workbook('Report.xlsx')
                 writer = pd.ExcelWriter('Report.xlsx', engine='openpyxl')
@@ -119,7 +120,8 @@ class Entries:
                 sr = writer.sheets[self.acc].max_row
                 df.to_excel(writer, sheet_name=self.acc, startrow=sr, index=False, header=False)
                 writer.save()
-                print("Updated Successfully")
+                print("EXCEL UPDATED SUCCESSFULLY")
+                ttk.Label(self.root, text="EXCEL UPDATED SUCCESSFULLY", foreground='green').place(x=600, y=550)
         elif self.opt == 'update':
             children_widgets = parent_widget.winfo_children()
             self.mydata = [child_widget.get(1.0, 'end')[:-1] for child_widget in children_widgets if child_widget.winfo_class() == 'Text']
@@ -131,7 +133,7 @@ class Entries:
                 cell.value = self.mydata[x-2]
             wb.save('Report.xlsx')
             print("UPDATED SUCCESSFULLY")
-            ttk.Label(self.root, text="UPDATED SUCCESSFULLY").place(x=600, y=550)
+            ttk.Label(self.root, text="UPDATED SUCCESSFULLY", foreground='green').place(x=600, y=550)
 
 
     def record(self):

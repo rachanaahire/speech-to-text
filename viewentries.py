@@ -13,7 +13,7 @@ class ViewEntries:
         self.acc = acc
         self.limit = 3
         self.wid = {7: 50, 13: 17}
-        clear_root_buttons(root, 3)
+        clear_root_buttons(root)
         book = openpyxl.load_workbook('Report.xlsx')
         self.sheets = {ws.title: ws for ws in book.worksheets}
         if self.acc in self.sheets:
@@ -25,7 +25,8 @@ class ViewEntries:
                 b.grid(row=r, column=0, ipady=10.5, ipadx=5)
             self.my_display(0)
         else:
-            ttk.Label(self.second_frame, text="No records found").grid(row=self.row_no, column=0)
+            ttk.Label(self.second_frame, text="NO RECORDS FOUND!!!", borderwidth=3, font=("Courier", 30)).grid(row=self.row_no, column=0, columnspan=8, pady=100)
+            
 
     def focus(self, event):
         widget = self.second_frame.focus_get()
@@ -34,10 +35,10 @@ class ViewEntries:
     
     def update(self):
         widget = self.second_frame.focus_get()
-        print("Gggg", widget)
-        vrow = int(getnum(str(widget)))
-        # index = int(getnum(str(widget)))+self.row_range-3
+        # print("=======>", widget)
+        vrow = int(getnum(str(widget)[-8:]))
         index = {'orow': vrow+self.row_range-3, 'vrow' : vrow}
+        print(index)
         top= Toplevel(self.root)
         top.geometry("900x600")
         top.title("UPDATE ENTRY")
@@ -62,9 +63,9 @@ class ViewEntries:
         back = offset - self.limit
         next = offset + self.limit 
         b1 = ttk.Button(self.root, text='Next >', command=lambda: self.my_display(next))
-        b1.place(x=40,y=550)
+        b1.place(x=200,y=600)
         b2 = ttk.Button(self.root, text='< Prev', command=lambda: self.my_display(back))
-        b2.place(x=150,y=550)
+        b2.place(x=350,y=600)
         if(self.mrows <= next): 
             b1["state"]="disabled"
         else:
@@ -75,5 +76,5 @@ class ViewEntries:
         else:
             b2["state"]="disabled"
         
-        print(self.row_range)
+        # print(self.row_range)
 
