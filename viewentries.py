@@ -57,9 +57,9 @@ class ViewEntries:
         back = offset - self.limit
         next = offset + self.limit
         b1 = ttk.Button(self.root, text='Next >', command=lambda: self.my_display(next))
-        b1.place(x=200,y=600)
+        b1.place(x=300,y=600)
         b2 = ttk.Button(self.root, text='< Prev', command=lambda: self.my_display(back))
-        b2.place(x=350,y=600)
+        b2.place(x=200,y=600)
         if(self.mrows <= next):
             b1["state"]="disabled"
         else:

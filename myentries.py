@@ -51,8 +51,8 @@ class Entries:
                 mywid = 15 if (j-1 not in self.wid) else self.wid[j-1]
                 cell = Text(self.second_frame, height=3, width=mywid)
                 cell.grid(row=2, column=j-1)
-                print("===========",self.index['orow'])
-                cell.insert(END, self.df_acc.iloc[self.index['orow']][j])
+                sen = "" if pd.isna(self.df_acc.iloc[self.index['orow']][j]) else self.df_acc.iloc[self.index['orow']][j]
+                cell.insert(END, sen)
 
         ttk.Button(self.root, text="RECORD",
                    command=self.record).place(x=200, y=600)
