@@ -14,8 +14,6 @@ class MyLabels:
                 padding=(5, 23, 5, 23), relief='solid').grid(row=0, column=j+13, rowspan=2)
 
         # ROW2
-        # if j:
-        #         ttk.Label(second_frame, text="", width=15, padding=(0, 27, 0, 28), relief='solid').grid(row=1, column=0)
         ttk.Label(second_frame, text="       Time & Date", width=20,
                 padding=(0, 27, 0, 28), relief='solid').grid(row=1, column=j)
         ttk.Label(second_frame, text="       Airframe Hours", width=20,

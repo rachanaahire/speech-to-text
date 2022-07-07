@@ -26,21 +26,15 @@ class ViewEntries:
             self.my_display(0)
         else:
             ttk.Label(self.second_frame, text="NO RECORDS FOUND!!!", borderwidth=3, font=("Courier", 30)).grid(row=self.row_no, column=0, columnspan=8, pady=100)
-            
 
-    def focus(self, event):
-        widget = self.second_frame.focus_get()
-        print(widget, "has focus")
-        print(event)
-    
+
     def update(self):
         widget = self.second_frame.focus_get()
         # print("=======>", widget)
         vrow = int(getnum(str(widget)[-8:]))
         index = {'orow': vrow+self.row_range-3, 'vrow' : vrow}
-        print(index)
         top= Toplevel(self.root)
-        top.geometry("900x600")
+        top.geometry("900x900")
         top.title("UPDATE ENTRY")
         from scrollableframe import ScrollableFrame
         ScrollableFrame(top, 'update', self.acc, index)
@@ -59,22 +53,22 @@ class ViewEntries:
                     sen = "" if pd.isna(self.df_acc.iloc[i-self.row_no+offset][j]) else self.df_acc.iloc[i-self.row_no+offset][j]
                     cell.insert(END, sen)
                 self.row_range = i-self.row_no+offset
-                
+
         back = offset - self.limit
-        next = offset + self.limit 
+        next = offset + self.limit
         b1 = ttk.Button(self.root, text='Next >', command=lambda: self.my_display(next))
         b1.place(x=200,y=600)
         b2 = ttk.Button(self.root, text='< Prev', command=lambda: self.my_display(back))
         b2.place(x=350,y=600)
-        if(self.mrows <= next): 
+        if(self.mrows <= next):
             b1["state"]="disabled"
         else:
-            b1["state"]="active"  
-            
+            b1["state"]="active"
+
         if(back >= 0):
-            b2["state"]="active"  
+            b2["state"]="active"
         else:
             b2["state"]="disabled"
-        
+
         # print(self.row_range)
 

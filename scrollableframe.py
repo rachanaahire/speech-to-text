@@ -6,10 +6,16 @@ from viewentries import ViewEntries
 
 class ScrollableFrame:
     def __init__(self, root, opt, acc, index=None):
-        content = Frame(root, width=1000, height=400)
-        content.pack(fill=BOTH, expand=1)
-        content.pack_propagate(0)
-        content.place(relx=0.5, y=375, anchor=CENTER)
+        if opt == 'update':
+            content = Frame(root, width=800, height=400)
+            content.pack(fill=BOTH, expand=1)
+            content.pack_propagate(0)
+            content.place(relx=0.5, y=350, anchor=CENTER)
+        else:
+            content = Frame(root, width=1000, height=400)
+            content.pack(fill=BOTH, expand=1)
+            content.pack_propagate(0)
+            content.place(relx=0.5, y=375, anchor=CENTER)
 
         # Create main frame
         main_frame = Frame(content)

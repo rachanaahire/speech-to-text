@@ -9,8 +9,12 @@ def getnum(mystr):
 
 def clear_root_buttons(frame):
     for widgets in frame.winfo_children():
-        if ('button' in str(widgets)):
-            if (int(getnum(str(widgets)))>3):
+        wid = str(widgets)
+        if ('button' in wid):
+            if (int(getnum(wid))>3):
+                widgets.destroy() 
+        if ('label' in wid):
+            if (int(getnum(wid))>2):
                 widgets.destroy() 
 
 def clear_frame(frame):

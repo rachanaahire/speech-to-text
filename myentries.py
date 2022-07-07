@@ -30,13 +30,10 @@ class Entries:
             if self.acc in sheets:
                 self.df_acc = pd.read_excel('Report.xlsx', sheet_name=self.acc)
         if (opt == 'insert'):
-            #fettch SNO
+            #fetch SNOW
             self.create_row(0, 4, 15,"")
             if (os.path.exists('Report.xlsx') and not add):
-                # book = openpyxl.load_workbook('Report.xlsx')
-                # sheets = {ws.title: ws for ws in book.worksheets}
                 if self.acc in sheets:
-                    # self.df_acc = pd.read_excel('Report.xlsx', sheet_name=self.acc)
                     self.snow = int(self.df_acc.iloc[-1]['SNOW']) + 1
                     self.create_row(4, 5, 15,self.snow)
                 else:
@@ -68,7 +65,7 @@ class Entries:
                     command=self.add_row).place(x=500, y=600)
         elif(opt == 'update'):
             ttk.Button(self.root, text="CANCEL",
-                    command=self.cancel).place(x=595, y=600)
+                    command=self.cancel).place(x=500, y=600)
 
     def create_row(self, scol, ecol, wid, ins):
         for j in range(scol, ecol):
@@ -104,14 +101,13 @@ class Entries:
             children_widgets = parent_widget.winfo_children()
             self.mydata = [child_widget.get(1.0, 'end')[:-1] for child_widget in children_widgets if child_widget.winfo_class() == 'Text']
             self.mdata = [[self.acc]+self.mydata[i:i+14] for i in range(0, len(self.mydata), 14)]
-            # print("Data: ", mdata)
 
             df = pd.DataFrame(self.mdata, columns=["Account Number", "Time & Date", "Airframe Hours", "How found or Aircrew Code", "By Whom (Name)", "SNOW", "Reason for placing unserviceable", "Job Number", "Repairs, Storage instructions, Modifications, Special Technical Instructions Servicing Instructions or other work including component Replacements. Note 1. State serial Numbers of Replacement items,  where applicable 2. RN only. Quote Workshop Reference ORN",
                             "Signature of Operative(s)", "Time and Date Completed", "Trade", "Man Hours", "Signature of Supervisor", "Authorised signature Certified Defect Cleared or Transferred to MOD from 703/704"])
             if not (os.path.exists('Report.xlsx')):
                 df.to_excel('Report.xlsx', index=False, sheet_name=self.acc)
                 print("EXCEL CREATED SUCCESSFULLY")
-                ttk.Label(self.root, text="EXCEL CREATED SUCCESSFULLY", foreground='green').place(x=600, y=550)
+                ttk.Label(self.root, text="EXCEL CREATED SUCCESSFULLY", foreground='green').place(x=600, y=600)
             else:
                 book = openpyxl.load_workbook('Report.xlsx')
                 writer = pd.ExcelWriter('Report.xlsx', engine='openpyxl')
@@ -121,7 +117,7 @@ class Entries:
                 df.to_excel(writer, sheet_name=self.acc, startrow=sr, index=False, header=False)
                 writer.save()
                 print("EXCEL UPDATED SUCCESSFULLY")
-                ttk.Label(self.root, text="EXCEL UPDATED SUCCESSFULLY", foreground='green').place(x=600, y=550)
+                ttk.Label(self.root, text="EXCEL UPDATED SUCCESSFULLY", foreground='green').place(x=600, y=600)
         elif self.opt == 'update':
             children_widgets = parent_widget.winfo_children()
             self.mydata = [child_widget.get(1.0, 'end')[:-1] for child_widget in children_widgets if child_widget.winfo_class() == 'Text']
@@ -133,7 +129,7 @@ class Entries:
                 cell.value = self.mydata[x-2]
             wb.save('Report.xlsx')
             print("UPDATED SUCCESSFULLY")
-            ttk.Label(self.root, text="UPDATED SUCCESSFULLY", foreground='green').place(x=600, y=550)
+            ttk.Label(self.root, text="EXCEL UPDATED SUCCESSFULLY", foreground='green').place(x=600, y=600)
 
 
     def record(self):
