@@ -1,4 +1,3 @@
-from logging import root
 from tkinter import *
 from tkinter import ttk
 from vosk import Model, KaldiRecognizer
@@ -113,8 +112,12 @@ class Entries:
                 writer = pd.ExcelWriter('Report.xlsx', engine='openpyxl')
                 writer.book = book
                 writer.sheets = {ws.title: ws for ws in book.worksheets}
-                sr = writer.sheets[self.acc].max_row
-                df.to_excel(writer, sheet_name=self.acc, startrow=sr, index=False, header=False)
+                if self.acc not in writer.sheets:
+                    df.to_excel('Report.xlsx', index=False, sheet_name=self.acc)
+                    df.to_excel(writer, sheet_name=self.acc, startrow=0, index=False)
+                else:
+                    sr = writer.sheets[self.acc].max_row
+                    df.to_excel(writer, sheet_name=self.acc, startrow=sr, index=False, header=False)
                 writer.save()
                 print("EXCEL UPDATED SUCCESSFULLY")
                 ttk.Label(self.root, text="EXCEL UPDATED SUCCESSFULLY", foreground='green').place(x=600, y=600)
