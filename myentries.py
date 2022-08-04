@@ -22,7 +22,7 @@ class Entries:
         self.snow = snow
         self.wid = {7: 50, 13: 17}
         clear_root_buttons(root)
-        model = Model(r"D:\study\python\text to speech project\TTS project\vosk-model-small-en-us-0.15")
+        model = Model(os.getcwd()+"\\vosk-model-small-en-us-0.15")
         self.recognizer = KaldiRecognizer(model, 16000)
         if (os.path.exists('Report.xlsx')):
             book = openpyxl.load_workbook('Report.xlsx')
