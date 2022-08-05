@@ -5,9 +5,9 @@ This project was generated with [Python](https://www.python.org/downloads/releas
 
 ## Documentation
 - [About](#about)
-- [Installation and Running the Program](#installation)
-<!-- - [Project Video](https://drive.google.com/file/d/1cdpOKTl8SfihM33u7xh96-6GDMHGecYQ/view?usp=sharing)
-- [Vision and Goals Of The Project](#vision-and-goals-of-the-project)
+- [Installation](#installation)
+- [Project Video]()
+<!--- - [Vision and Goals Of The Project](#vision-and-goals-of-the-project)
 - [Users/Personas Of The Project](#users/personas-of-the-project)
 - [Scope and Features Of The Project](#scope-and-features-of-the-project)
 - [Solution Concept](#solution-concept)
@@ -72,4 +72,7 @@ We are using Indian English vosk Model ([vosk-model-en-in-0.5](https://alphaceph
 We can run the program from Command Prompt. Change the path directory to the path where app.py exist. Then run the following command:
 ``` python app.py ```
 
+
+## Project Video
+Below is the drive link to the project. It helps in understanding how the project works and what are its functionalities.
 
