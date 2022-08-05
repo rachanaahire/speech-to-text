@@ -1,6 +1,5 @@
 
 def getnum(mystr):
-    # print("=>",mystr)
     num = ""
     for c in mystr:
         if c.isdigit():

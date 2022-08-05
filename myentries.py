@@ -1,12 +1,12 @@
 from tkinter import *
 from tkinter import ttk
+from tkinter import messagebox
 from vosk import Model, KaldiRecognizer
 import pandas as pd
 import openpyxl
 import pyaudio
 import os
 from common_functions import clear_root_buttons
-from viewentries import ViewEntries
 
 class Entries:
     def __init__(self, root, acc, second_frame, i, opt, ind, add = False, snow = 1):
@@ -45,7 +45,6 @@ class Entries:
             self.create_row(8, 13, 15,"")
             self.create_row(13, 14, 17,"")
         else:
-            print('update')
             for j in range(1, 15):
                 mywid = 15 if (j-1 not in self.wid) else self.wid[j-1]
                 cell = Text(self.second_frame, height=3, width=mywid)
@@ -120,7 +119,9 @@ class Entries:
                     df.to_excel(writer, sheet_name=self.acc, startrow=sr, index=False, header=False)
                 writer.save()
                 print("EXCEL UPDATED SUCCESSFULLY")
-                ttk.Label(self.root, text="EXCEL UPDATED SUCCESSFULLY", foreground='green').place(x=600, y=600)
+                messagebox.showinfo('Saved Changes', "EXCEL UPDATED SUCCESSFULLY")
+            from scrollableframe import ScrollableFrame
+            ScrollableFrame(self.root, 'insert', self.acc)
         elif self.opt == 'update':
             children_widgets = parent_widget.winfo_children()
             self.mydata = [child_widget.get(1.0, 'end')[:-1] for child_widget in children_widgets if child_widget.winfo_class() == 'Text']
@@ -132,7 +133,7 @@ class Entries:
                 cell.value = self.mydata[x-2]
             wb.save('Report.xlsx')
             print("UPDATED SUCCESSFULLY")
-            ttk.Label(self.root, text="EXCEL UPDATED SUCCESSFULLY", foreground='green').place(x=600, y=600)
+            messagebox.showinfo('Saved Changes', "EXCEL UPDATED SUCCESSFULLY")
 
 
     def record(self):

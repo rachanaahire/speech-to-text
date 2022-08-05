@@ -11,7 +11,7 @@ class ViewEntries:
         self.root = root
         self.row_range = 0
         self.acc = acc
-        self.limit = 3
+        self.limit = 10
         self.wid = {7: 50, 13: 17}
         clear_root_buttons(root)
         book = openpyxl.load_workbook('Report.xlsx')
@@ -30,14 +30,14 @@ class ViewEntries:
 
     def update(self):
         widget = self.second_frame.focus_get()
-        # print("=======>", widget)
         vrow = int(getnum(str(widget)[-8:]))
-        index = {'orow': vrow+self.row_range-3, 'vrow' : vrow}
-        top= Toplevel(self.root)
-        top.geometry("900x900")
-        top.title("UPDATE ENTRY")
-        from scrollableframe import ScrollableFrame
-        ScrollableFrame(top, 'update', self.acc, index)
+        if (vrow+self.row_range-self.limit < self.mrows):
+            index = {'orow': vrow+self.row_range-self.limit, 'vrow' : vrow}
+            top= Toplevel(self.root)
+            top.geometry("900x900")
+            top.title("UPDATE ENTRY")
+            from scrollableframe import ScrollableFrame
+            ScrollableFrame(top, 'update', self.acc, index)
 
     def my_display(self, offset):
         for i in range(self.row_no, self.limit+self.row_no):
@@ -70,5 +70,4 @@ class ViewEntries:
         else:
             b2["state"]="disabled"
 
-        # print(self.row_range)
 
