@@ -5,7 +5,7 @@ This project was generated with [Python](https://www.python.org/downloads/releas
 
 ## Documentation
 - [About](#about)
-<!-- - [Installation](Installation/INSTALLATION.md) -->
+- [Installation](#installation)
 <!-- - [Project Video](https://drive.google.com/file/d/1cdpOKTl8SfihM33u7xh96-6GDMHGecYQ/view?usp=sharing)
 - [Vision and Goals Of The Project](#vision-and-goals-of-the-project)
 - [Users/Personas Of The Project](#users/personas-of-the-project)
@@ -23,6 +23,7 @@ This project was generated with [Python](https://www.python.org/downloads/releas
 - [Mentor](#mentor)
 - [Contributors](#contributors) -->
 
+** **
 
 ## About
 * **Stack:** The project is developed purely in Python. 
@@ -36,3 +37,21 @@ This project was generated with [Python](https://www.python.org/downloads/releas
 * [openpyxl](https://pypi.org/project/openpyxl/)
 * [pyaudio](https://pypi.org/project/PyAudio/)
 * [os](https://docs.python.org/3/library/os.html)
+
+** **
+
+## Installation
+### Steps
+-   Setup python 3.10.5
+-   Install dependencies/modules with the help of pip
+-   Futher configuration required to utilise the modules.
+
+### Getting started
+##### Install all the dependencies
+```
+$ pip install tkinter
+$ pip install vosk
+$ pip install pandas
+$ pip install openpyxl
+$ pip install PyAudio 
+```
