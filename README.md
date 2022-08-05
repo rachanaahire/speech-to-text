@@ -32,7 +32,7 @@ This project was generated with [Python](https://www.python.org/downloads/releas
 
 **Modules Used:**
 * [tkinter](https://docs.python.org/3/library/tkinter.html)
-* [vosk](https://pypi.org/project/vosk/)
+* [vosk](https://pypi.org/project/vosk/) : Model ---> vosk-model-en-in-0.5
 * [pandas](https://pypi.org/project/pandas/)
 * [openpyxl](https://pypi.org/project/openpyxl/)
 * [pyaudio](https://pypi.org/project/PyAudio/)
@@ -55,3 +55,14 @@ $ pip install pandas
 $ pip install openpyxl
 $ pip install PyAudio 
 ```
+**Note:** If there is an error in installing PyAudio then following can be done to install it.
+```
+$ pip install pipwin
+$ pipwin install pyaudio 
+```
+
+### Further Configuration/Changes if needed
+We are using Indian English vosk Model ([vosk-model-en-in-0.5](https://alphacephei.com/vosk/models)). If there is a need to change it then we can follow the below procedure:
+``` Go to https://alphacephei.com/vosk/models and download the Model which is required. ```
+``` Unzip the folder to the project location ```
+``` Make necessary Model path changes in "myentries.py" (line number 24) ```
