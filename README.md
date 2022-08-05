@@ -5,7 +5,7 @@ This project was generated with [Python](https://www.python.org/downloads/releas
 
 ## Documentation
 - [About](#about)
-- [Installation](#installation)
+- [Installation and Running the Program](#installation)
 <!-- - [Project Video](https://drive.google.com/file/d/1cdpOKTl8SfihM33u7xh96-6GDMHGecYQ/view?usp=sharing)
 - [Vision and Goals Of The Project](#vision-and-goals-of-the-project)
 - [Users/Personas Of The Project](#users/personas-of-the-project)
@@ -63,6 +63,13 @@ $ pipwin install pyaudio
 
 ### Further Configuration/Changes if needed
 We are using Indian English vosk Model ([vosk-model-en-in-0.5](https://alphacephei.com/vosk/models)). If there is a need to change it then we can follow the below procedure:
-``` Go to https://alphacephei.com/vosk/models and download the Model which is required. ```
-``` Unzip the folder to the project location ```
-``` Make necessary Model path changes in "myentries.py" (line number 24) ```
+* Go to https://alphacephei.com/vosk/models and download the Model which is required.
+* Unzip the folder to the project location
+* Make necessary Model path changes in "myentries.py" (line number 24)
+
+
+### Run the Project
+We can run the program from Command Prompt. Change the path directory to the path where app.py exist. Then run the following command:
+``` python app.py ```
+
+
