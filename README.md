@@ -27,7 +27,8 @@ This project was generated with [Python](https://www.python.org/downloads/releas
 ## About
 * **Stack:** The project is developed purely in Python. 
 * **Version:** Python version 3.10.5 or above can be used.
-* **Front-End:** Python tkinter is used for Front-end side. 
+* **Front-End:** Python tkinter is used for Front-end side.
+
 **Modules Used:**
 * [tkinter](https://docs.python.org/3/library/tkinter.html)
 * [vosk](https://pypi.org/project/vosk/)
